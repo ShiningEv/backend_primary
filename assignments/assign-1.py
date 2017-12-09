@@ -4,17 +4,11 @@ import socket
 import re
 
 """
-2017/02/16
-作业 1
-
-
-资料:
 在 Python3 中，bytes 和 str 的互相转换方式是
 str.encode('utf-8')
 bytes.decode('utf-8')
 
 send 函数的参数和 recv 函数的返回值都是 bytes 类型
-其他请参考上课内容, 不懂在群里发问, 不要憋着
 """
 
 
