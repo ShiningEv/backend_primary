@@ -1,69 +1,143 @@
 # coding: utf-8
+
 import socket
 
-# 这个程序就是一个套路程序, 套路程序没必要思考为什么会是这样
-# 记住套路, 能用, 就够了
-# 运行这个程序后, 浏览器打开 localhost:2000 就能访问了
-#
-# 服务器的 host 为空字符串, 表示接受任意 ip 地址的连接
-# port 是端口, 这里设置为 2000, 随便选的一个数字
-host = '0.0.0.0'
-port = 2000
-
-# s 是一个 socket 实例
-s = socket.socket()
-# s.bind 用于绑定
-# 注意 bind 函数的参数是一个 tuple
-s.bind((host, port))
-
-# 用一个无限循环来处理请求
-while True:
-    # 套路, 先要 s.listen 开始监听
-    # 注意 参数 5 的含义不必关心
-    s.listen(5)
-    # 当有客户端过来连接的时候, s.accept 函数就会返回 2 个值
-    # 分别是 连接 和 客户端 ip 地址
-    connection, address = s.accept()
-    print("connection:{}, address:{}".format(connection, address))
-    '''
-    port of address is random:
-    connection:<socket.socket fd=312, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 2000), raddr=('127.0.0.1', 5517)>, 
-    address:('127.0.0.1', 5517)
-    connection:<socket.socket fd=312, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 2000), raddr=('127.0.0.1', 5518)>, 
-    address:('127.0.0.1', 5518)
-    '''
-    # recv 可以接收客户端发送过来的数据
-    # 参数是要接收的字节数
-    # 返回值是一个 bytes 类型
-    request = connection.recv(1024)
-    # 取完所有的数据
-    # buffer_size = 1024
-    # request = b''
-    # while True:
-    #     request_part = connection.recv(buffer_size)
-    #     request += request_part.encode('utf-8')
-    #     # 取到数据的长度不够recv参数的时候，说明数据已经取完了
-    #     if len(request_part) < buffer_size:
-    #         break
-
-    # bytes 类型调用 decode('utf-8') 来转成一个字符串(str)
-    print('ip and request, {}\n{}'.format(address, request.decode('utf-8')))
-    # b'' 表示这是一个 bytes 对象
-    response = b'HTTP/1.1 200 OK\r\n\r\n<h1>Hello World!</h1>'
-    # 用 sendall 发送给客户端
-    connection.sendall(response)
-    # 发送完毕后, 关闭本次连接
-    connection.close()
+"""
+0, 请注意代码的格式和规范(PEP8)
+1, 规范化生成响应
+2, HTTP 头
+3, 几个常用 HTML 标签及其用法
+4, 浏览器向服务器传递参数的两种方式
+"""
 
 '''
-### example of request
-GET / HTTP/1.1
-Host: localhost:2000
-Connection: keep-alive
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36
-Upgrade-Insecure-Requests: 1
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-GB,en;q=0.9,zh-CN;q=0.8,zh;q=0.7,en-US;q=0.6,zh-TW;q=0.5
-Cookie: Pycharm-5a80fe93=d8186142-2b90-4feb-827f-fdfdf4a3dfa5
+一个程序都只能有一个入口 if __name__ ==  '__main__'
+所有的内容都应该写在函数里面
 '''
+
+def log(*args, **kwargs):
+    """
+    用这个 log 替代 print
+    在任何语言中都不应该用原生的print，应该包裹之后再使用
+    """
+    print('log', *args, **kwargs)
+
+
+def route_index():
+    """
+    主页的处理函数, 返回主页的响应
+    """
+    header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n'
+    body = '<h1>Hello Gua</h1><img src="/doge.gif">'
+    r = header + '\r\n' + body
+    return r.encode(encoding='utf-8')
+
+
+def page(name):
+    with open(name, encoding='utf-8') as f:
+        return f.read()
+
+
+def route_msg():
+    """
+    msg 页面的处理函数
+    """
+    header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n'
+    body = page('html_basic.html')
+    r = header + '\r\n' + body
+    return r.encode(encoding='utf-8')
+
+
+def route_json():
+    header = 'HTTP/1.1 200 OK\r\nContent-Type: text/json\r\n'
+    body = page('json')
+    r = header + '\r\n' + body
+    return r.encode(encoding='utf-8')
+
+
+def route_image():
+    """
+    图片的处理函数, 读取图片并生成响应返回
+    """
+    with open('doge.gif', 'rb') as f:
+        header = b'HTTP/1.1 200 OK\r\nContent-Type: image/gif\r\n'
+        img = header + b'\r\n' + f.read()
+        return img
+
+
+def error(code=404):
+    """
+    根据 code 返回不同的错误响应
+    目前只有 404
+    """
+    # 之前上课我说过不要用数字来作为字典的 key
+    # 但是在 HTTP 协议中 code 都是数字似乎更方便所以打破了这个原则
+    e = {
+        404: b'HTTP/1.1 404 NOT FOUND\r\n\r\n<h1>NOT FOUND</h1>',
+    }
+    return e.get(code, b'')
+
+
+def response_for_path(path):
+    """
+    根据 path 调用相应的处理函数
+    没有处理的 path 会返回 404
+    """
+    '''
+    这里的路径叫做路由
+    '''
+    r = {
+        '/': route_index,
+        '/doge.gif': route_image,
+        '/msg': route_msg,
+        '/json': route_json,
+    }
+    response = r.get(path, error)
+    return response()
+
+
+def run(host='', port=3000):
+    """
+    启动服务器
+    """
+    # 初始化 socket 套路
+    # 使用 with 可以保证程序中断的时候正确关闭 socket 释放占用的端口
+    with socket.socket() as s:
+        s.bind((host, port))
+        # 无限循环来处理请求
+        while True:
+            # 监听 接受 读取请求数据 解码成字符串
+            s.listen(5)
+            connection, address = s.accept()
+            request = connection.recv(1024)
+            log('raw, ', request)
+            request = request.decode('utf-8')
+            log('ip and request, {}\n{}'.format(address, request))
+            try:
+                # 因为 chrome 会发送空请求导致 split 得到空 list
+                # 所以这里用 try 防止程序崩溃
+                path = request.split()[1]
+                # 用 response_for_path 函数来得到 path 对应的响应内容
+                response = response_for_path(path)
+                # 把响应发送给客户端
+                connection.sendall(response)
+            except Exception as e:
+                log('error', e)
+            # 处理完请求, 关闭连接
+            connection.close()
+
+
+def main():
+    # 生成配置并且运行程序
+    """
+    dict内容的一致性，末尾的逗号
+    """
+    config = dict(
+        host='',
+        port=3000,
+    )
+    run(**config)
+
+
+if __name__ == '__main__':
+    main()
