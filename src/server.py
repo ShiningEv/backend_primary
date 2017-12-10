@@ -28,6 +28,35 @@ class Request(object):
         self.query = {}
         self.headers = {}
         self.body = ''
+        self.cookies = {}
+
+    def add_cookies(self):
+        """
+        height=169; user=gua
+        :return:
+        """
+        cookies = self.headers.get('Cookie', '')
+        kvs = cookies.split('; ')
+        log('cookie', kvs)
+        for kv in kvs:
+            if '=' in kv:
+                k, v = kv.split('=')
+                self.cookies[k] = v
+
+    def add_headers(self, header):
+        """
+        [
+            'Accept-Language: zh-CN,zh;q=0.8'
+            'Cookie: height=169; user=gua'
+        ]
+        """
+        lines = header
+        for line in lines:
+            k, v = line.split(': ', 1)
+            self.headers[k] = v
+        # 清除 cookies
+        self.cookies = {}
+        self.add_cookies()
 
     # 这里的body是request中请求的body
     def form(self):
@@ -125,7 +154,6 @@ def response_for_path(path):
     # update是dict的函数，用于将route_dict合并到r中
     # get也是dict的函数，传入两个参数：key & error函数
     r.update(route_dict)
-    log("r: ", r)
     response = r.get(path, error)
     return response(request)
 
@@ -157,14 +185,7 @@ def run(host='', port=3000):
             log("path: ", path)
             # 设置 request 的 method
             request.method = r.split()[0]
-            log("request.method: ", request.method)
-            # request headers
-            headers = r.split('\r\n', 1)[1].split('\r\n\r\n')[0]
-            items = headers.split('\r\n')
-            for item in items:
-                k, v = item.split(': ', 1)
-                request.headers[k] = v
-            log("request.headers: ", request.headers)
+            request.add_headers(r.split('\r\n\r\n', 1)[0].split('\r\n')[1:])
             # 把 body 放入 request 中
             request.body = r.split('\r\n\r\n', 1)[1] # 不论如何处理，r终究是request！请求头的body！
             log("request.body: ", request.body)

@@ -5,36 +5,51 @@ from models import Model
 
 class User(Model):
     def __init__(self, form):
+        self.id = form.get('id', None)
+        if self.id is not None:
+            self.id = int(self.id)
         self.username = form.get('username', '')
         self.password = form.get('password', '')
+        self.note = form.get('note', '')
 
     def validate_login(self):
-        all_user = self.all()
-        all_dict = [user.__dict__ for user in all_user]
-        return self.__dict__ in all_dict
-        # 不能使用self in all_user，因为对象是不可能相同的！！！
         # return self.username == 'gua' and self.password == '123'
-
-        # 直接用前面实现的find_by函数
-        # 要记住，尽可能多的复用，类似上面函数中的代码都是零分代码！
-        # u = User.find_by(username = self.username)
-        # return u is not None and u.password == self.password
-
-        # 而且，上面的零分代码很不好理解！！！
+        u = User.find_by(username=self.username)
         # us = User.all()
         # for u in us:
         #     if u.username == self.username and u.password == self.password:
         #         return True
         # return False
-        # 上面这样写就很好理解！！！
-        # 不要吝啬写for循环，清晰明了！
+        return u is not None and u.password == self.password
+        # 这样的代码是不好的，不应该用隐式转换
+        # 隐式判断的各种规则，每一种语言都不一样，而且飘忽不定
+        # 所以最好全都显式判定，养成良好习惯
+        # return u and u.password == self.password
+        """
+        0 None ''
+        """
 
     def validate_register(self):
         return len(self.username) > 2 and len(self.password) > 2
 
 def test():
-    u = User.find_by(username='gua')
-    print(u)
+    # users = User.all()
+    # u = User.find_by(username='gua')
+    # log('users', u)
+    form = dict(
+        username='gua',
+        password='gua',
+    )
+    u = User(form)
+    u.save()
+    # u.save()
+    # u.save()
+    # u.save()
+    # u.save()
+    # u.save()
+    # u = User.find_by(id=1)
+    # u.username = '瓜'
+    # u.save()
 
 if __name__ == '__main__':
     test()
