@@ -139,6 +139,25 @@ class Model(object):
                 data.append(m)
         return data
 
+    def remove(self):
+        models = self.all()
+        if self.__dict__.get('id') is not None:
+            # 有 id 说明已经是存在于数据文件中的数据
+            # 那么就找到这条数据并替换之
+            index = -1
+            for i, m in enumerate(models):
+                if m.id == self.id:
+                    index = i
+                    break
+            # 看看是否找到下标
+            # 如果找到，就替换掉这条数据
+            if index > -1:
+                del models[index]
+        # 保存
+        l = [m.__dict__ for m in models]
+        path = self.db_path()
+        save(l, path)
+
     def __repr__(self):
         """
         这是一个 魔法函数

@@ -40,10 +40,8 @@ def template(name):
 
 
 def current_user(request):
-    log('session', session)
     session_id = request.cookies.get('user', '')
     username = session.get(session_id, '【游客】')
-    log('username from session:', username)
     # username = request.cookies.get('user', '【游客】')
     return username
 
@@ -70,11 +68,18 @@ def response_with_headers(headers, code=200):
                        for k, v in headers.items()])
     return header
 
+
 def redirect(url):
     """
     浏览器在收到 302 响应的时候
     会自动在 HTTP header 里面找 Location 字段并获取一个 url
     然后自动请求新的 url
+    """
+    """
+    301是永久重定向，浏览器会记住，不再会访问这个网页
+    302是暂时重定向
+    HTTP/1.1 302 xxx
+    Location: /
     """
     headers = {
         'Location': url,
@@ -83,6 +88,7 @@ def redirect(url):
     # 注意, 没有 HTTP body 部分
     r = response_with_headers(headers, 302) + '\r\n'
     return r.encode('utf-8')
+
 
 def route_login(request):
     """
@@ -120,15 +126,75 @@ def route_login(request):
     return r.encode(encoding='utf-8')
 
 
+def route_admin(request):
+    """
+    登录admin页面的路由函数
+    """
+    headers = {
+        'Content-Type': 'text/html',
+    }
+    log('login, cookies', request.cookies)
+    username = current_user(request)
+    u = User.find_by(username=username)
+    if u is None or u.role != 1:
+        return redirect('/login')
+    body = template('admin.html')
+    body = body.replace('{{result}}', "<pre>{}</pre>".format(User.all()))
+    header = response_with_headers(headers)
+    r = header + '\r\n' + body
+    return r.encode(encoding='utf-8')
+
+
+def route_admin_update(request):
+    """
+    用于admin页面修改密码的路由
+    """
+    headers = {
+        'Content-Type': 'text/html',
+    }
+    uname = current_user(request)
+    u = User.find_by(username=uname)
+    if u is None:
+        return redirect('/login')
+    if request.method == 'POST':
+        form = request.form()
+        user_id = int(form.get('id', -1))
+        user = User.find_by(id=user_id)
+        if user is None:
+            result = "用户 id={} 不存在".format(3)
+            return redirect('/admin/users')
+            # body = template('admin.html')
+            # body = body.replace('{{result}}', "<pre>{}</pre>".format(User.all()))
+            # body = body.replace('{{update_result}}', result)
+            # header = response_with_headers(headers)
+            # r = header + '\r\n' + body
+            # return r.encode(encoding='utf-8')
+        passwd = form.get('password', '')
+        user.password = passwd
+        if user.validate_register():
+            user.save()
+            # result = '密码修改成功'
+        # else:
+            # result = '用户名或者密码长度必须大于2'
+    # body = template('admin.html')
+    # body = body.replace('{{result}}', "<pre>{}</pre>".format(User.all()))
+    # body = body.replace('{{update_result}}', result)
+    # header = response_with_headers(headers)
+    # r = header + '\r\n' + body
+    # return r.encode(encoding='utf-8')
+    return redirect('/admin/users')
+
+
 def route_register(request):
     """
     注册页面的路由函数
+    GET，则是请求register页面
+    POST，则是用户注册
     """
     header = 'HTTP/1.x 210 VERY OK\r\nContent-Type: text/html\r\n'
     if request.method == 'POST':
         form = request.form()
         u = User.new(form)
-        log('u test: ', u)
         if u.validate_register():
             u.save()
             result = '注册成功<br> <pre>{}</pre>'.format(User.all())
@@ -217,4 +283,6 @@ route_dict = {
     '/register': route_register,
     '/messages': route_message,
     '/profile': route_profile,
+    '/admin/users': route_admin,
+    '/admin/user/update': route_admin_update,
 }

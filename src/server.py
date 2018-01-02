@@ -17,6 +17,8 @@ from utils import log
 
 from routes import route_static
 from routes import route_dict
+# 注意要用 from import as 来避免重名
+from routes_todo import route_dict as todo_route
 
 
 # 定义一个 class 用于保存请求的数据
@@ -50,6 +52,7 @@ class Request(object):
             'Cookie: height=169; user=gua'
         ]
         """
+        self.headers = {}
         lines = header
         for line in lines:
             k, v = line.split(': ', 1)
@@ -85,9 +88,6 @@ class Request(object):
         return f
 
 
-request = Request()
-
-
 def error(request, code=404):
     """
     根据 code 返回不同的错误响应
@@ -110,7 +110,6 @@ def parsed_path(path):
     }
     """
     index = path.find('?')
-    log("path, index: ", path, index)
     if index == -1:
         return path, {}
     else:
@@ -154,8 +153,12 @@ def response_for_path(path):
     # update是dict的函数，用于将route_dict合并到r中
     # get也是dict的函数，传入两个参数：key & error函数
     r.update(route_dict)
+    r.update(todo_route)
     response = r.get(path, error)
     return response(request)
+
+
+request = Request()
 
 
 def run(host='', port=3000):
@@ -173,25 +176,26 @@ def run(host='', port=3000):
             s.listen(5)
             connection, address = s.accept()
             r = connection.recv(1024)
-            log(r)
+            log('\n\n-------------------------new request-------------------------')
+            log('original requests: \n', r)
             r = r.decode('utf-8')
-            log('original requests: ', r)
-            # log('ip and request, {}\n{}'.format(address, request))
             # 因为 chrome 会发送空请求导致 split 得到空 list
             # 所以这里判断一下防止程序崩溃
             if len(r.split()) < 2:
                 continue
+            # parse request
+            # path
             path = r.split()[1]
             log("path: ", path)
-            # 设置 request 的 method
+            # method
             request.method = r.split()[0]
+            # headers
             request.add_headers(r.split('\r\n\r\n', 1)[0].split('\r\n')[1:])
-            # 把 body 放入 request 中
+            # request body
             request.body = r.split('\r\n\r\n', 1)[1] # 不论如何处理，r终究是request！请求头的body！
             log("request.body: ", request.body)
             # 用 response_for_path 函数来得到 path 对应的响应内容
             response = response_for_path(path)
-            log("response: ", response)
             # 把响应发送给客户端
             connection.sendall(response)
             # 处理完请求, 关闭连接

@@ -1,3 +1,4 @@
+#coding: utf-8
 import time
 
 
@@ -8,3 +9,7 @@ def log(*args, **kwargs):
     value = time.localtime(int(time.time()))
     dt = time.strftime(format, value)
     print(dt, *args, **kwargs)
+
+
+# def debug(*args, **kwargs):
+#     print("***debug***: ", *args, **kwargs)

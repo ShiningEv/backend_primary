@@ -11,6 +11,7 @@ class User(Model):
         self.username = form.get('username', '')
         self.password = form.get('password', '')
         self.note = form.get('note', '')
+        self.role = form.get('role', 10)
 
     def validate_login(self):
         # return self.username == 'gua' and self.password == '123'
