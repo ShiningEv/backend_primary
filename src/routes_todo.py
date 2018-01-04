@@ -1,43 +1,13 @@
-from datetime import datetime
 from utils import log
+from utils import template
+from utils import renderer
+from utils import http_response
+from utils import redirect
 from models.todo import Todo
 from models.user import User
 from routes import current_user
 
-
-def template(name):
-    """
-    根据名字读取 templates 文件夹里的一个文件并返回
-    """
-    path = 'templates/' + name
-    with open(path, 'r', encoding='utf-8') as f:
-        return f.read()
-
-
-def response_with_headers(headers, code=200):
-    """
-    Content-Type: text/html
-    Set-Cookie: user=gua
-    """
-    header = 'HTTP/1.1 {} VERY OK\r\n'.format(code)
-    header += ''.join(['{}: {}\r\n'.format(k, v)
-                           for k, v in headers.items()])
-    return header
-
-
-def redirect(url):
-    """
-    浏览器在收到 302 响应的时候
-    会自动在 HTTP header 里面找 Location 字段并获取一个 url
-    然后自动请求新的 url
-    """
-    headers = {
-        'Location': url,
-    }
-    # 增加 Location 字段并生成 HTTP 响应返回
-    # 注意, 没有 HTTP body 部分
-    r = response_with_headers(headers, 302) + '\r\n'
-    return r.encode('utf-8')
+from datetime import datetime
 
 
 def login_required(route_function):
@@ -54,9 +24,6 @@ def index(request):
     """
     todo 首页的路由函数
     """
-    headers = {
-        'Content-Type': 'text/html',
-    }
     # 找到当前登录的用户, 如果没登录, 就 redirect 到 /login
     uname = current_user(request)
     u = User.find_by(username=uname)
@@ -75,23 +42,14 @@ def index(request):
         updated_time = datetime.fromtimestamp(t.updated_time).strftime("%m/%d %H:%M")
         s = '<h3>{} : {} {} {} created@{} updated@{}</h3>'.format(t.id, t.title, edit_link, delete_link, created_time, updated_time)
         todos.append(s)
-    todo_html = ''.join(todos)
-    # 替换模板文件中的标记字符串
-    body = template('todo_index.html')
-    body = body.replace('{{todos}}', todo_html)
-    # 下面 3 行可以改写为一条函数, 还把 headers 也放进函数中
-    header = response_with_headers(headers)
-    r = header + '\r\n' + body
-    return r.encode(encoding='utf-8')
+    body = renderer('todo_index.html', todos=todos)
+    return http_response(body)
 
 
 def edit(request):
     """
     todo edit 的路由函数
     """
-    headers = {
-        'Content-Type': 'text/html',
-    }
     uname = current_user(request)
     u = User.find_by(username=uname)
     if u is None:
@@ -104,22 +62,14 @@ def edit(request):
     # if todo_id < 1:
     #     return error(404)
     # 替换模板文件中的标记字符串
-    body = template('todo_edit.html')
-    body = body.replace('{{todo_id}}', str(t.id))
-    body = body.replace('{{todo_title}}', str(t.title))
-    # 下面 3 行可以改写为一条函数, 还把 headers 也放进函数中
-    header = response_with_headers(headers)
-    r = header + '\r\n' + body
-    return r.encode(encoding='utf-8')
+    body = renderer('todo_edit.html', todo_id=t.id, todo_title=t.title)
+    return http_response(body)
 
 
 def add(request):
     """
     用于增加新 todo 的路由函数
     """
-    headers = {
-        'Content-Type': 'text/html',
-    }
     uname = current_user(request)
     u = User.find_by(username=uname)
     if request.method == 'POST':
@@ -152,8 +102,7 @@ def update(request):
             return redirect('/todo')
         if t.user_id != u.id:
             return redirect('/login')
-        t.title = form.get('title', t.title)
-        t.save()
+        t.update(t, form)
     # 浏览器发送数据过来被处理后, 重定向到首页
     # 浏览器在请求新首页的时候, 就能看到新增的数据了
     return redirect('/todo')

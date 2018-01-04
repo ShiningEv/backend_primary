@@ -1,4 +1,8 @@
 from utils import log
+from utils import template
+from utils import renderer
+from utils import http_response
+from utils import redirect
 from models.message import Message
 from models.user import User
 
@@ -8,12 +12,7 @@ import random
 # 这个函数用来保存所有的 messages
 message_list = []
 # session 可以在服务器端实现过期功能
-session = {
-    'session id': {
-        'username': 'gua',
-        '过期时间': '2.22 21:00:00'
-    }
-}
+session = {}
 
 
 def random_str():
@@ -30,15 +29,6 @@ def random_str():
     return s
 
 
-def template(name):
-    """
-    根据名字读取 templates 文件夹里的一个文件并返回
-    """
-    path = 'templates/' + name
-    with open(path, 'r', encoding='utf-8') as f:
-        return f.read()
-
-
 def current_user(request):
     session_id = request.cookies.get('user', '')
     username = session.get(session_id, '【游客】')
@@ -50,55 +40,16 @@ def route_index(request):
     """
     主页的处理函数, 返回主页的响应
     """
-    header = 'HTTP/1.1 210 VERY OK\r\nContent-Type: text/html\r\n'
-    body = template('index.html')
     username = current_user(request)
-    body = body.replace('{{username}}', username)
-    r = header + '\r\n' + body
-    return r.encode(encoding='utf-8')
-
-
-def response_with_headers(headers, code=200):
-    """
-    Content-Type: text/html
-    Set-Cookie: user=gua
-    """
-    header = 'HTTP/1.1 {} VERY OK\r\n'.format(code)
-    header += ''.join(['{}: {}\r\n'.format(k, v)
-                       for k, v in headers.items()])
-    return header
-
-
-def redirect(url):
-    """
-    浏览器在收到 302 响应的时候
-    会自动在 HTTP header 里面找 Location 字段并获取一个 url
-    然后自动请求新的 url
-    """
-    """
-    301是永久重定向，浏览器会记住，不再会访问这个网页
-    302是暂时重定向
-    HTTP/1.1 302 xxx
-    Location: /
-    """
-    headers = {
-        'Location': url,
-    }
-    # 增加 Location 字段并生成 HTTP 响应返回
-    # 注意, 没有 HTTP body 部分
-    r = response_with_headers(headers, 302) + '\r\n'
-    return r.encode('utf-8')
+    body = renderer('index.html', username = username)
+    return http_response(body)
 
 
 def route_login(request):
     """
     登录页面的路由函数
     """
-    headers = {
-        'Content-Type': 'text/html',
-        # 'Set-Cookie': 'height=169; gua=1; pwd=2; Path=/',
-    }
-    # log('login, headers', request.headers)
+    headers = {}
     log('login, cookies', request.cookies)
     username = current_user(request)
     if request.method == 'POST':
@@ -117,32 +68,23 @@ def route_login(request):
             result = '用户名或者密码错误'
     else:
         result = ''
-    body = template('login.html')
-    body = body.replace('{{result}}', result)
-    body = body.replace('{{username}}', username)
-    header = response_with_headers(headers)
-    r = header + '\r\n' + body
-    log('login 的响应', r)
-    return r.encode(encoding='utf-8')
+    body = renderer('login.html', result=result, username=username)
+    return http_response(body, headers)
 
 
 def route_admin(request):
     """
     登录admin页面的路由函数
     """
-    headers = {
-        'Content-Type': 'text/html',
-    }
     log('login, cookies', request.cookies)
     username = current_user(request)
     u = User.find_by(username=username)
     if u is None or u.role != 1:
         return redirect('/login')
-    body = template('admin.html')
-    body = body.replace('{{result}}', "<pre>{}</pre>".format(User.all()))
-    header = response_with_headers(headers)
-    r = header + '\r\n' + body
-    return r.encode(encoding='utf-8')
+    us = User.all()
+    body = renderer('admin.html', users = us)
+    # body = body.replace('{{result}}', "<pre>{}</pre>".format(User.all()))
+    return http_response(body)
 
 
 def route_admin_update(request):
@@ -163,12 +105,6 @@ def route_admin_update(request):
         if user is None:
             result = "用户 id={} 不存在".format(3)
             return redirect('/admin/users')
-            # body = template('admin.html')
-            # body = body.replace('{{result}}', "<pre>{}</pre>".format(User.all()))
-            # body = body.replace('{{update_result}}', result)
-            # header = response_with_headers(headers)
-            # r = header + '\r\n' + body
-            # return r.encode(encoding='utf-8')
         passwd = form.get('password', '')
         user.password = passwd
         if user.validate_register():
@@ -176,12 +112,6 @@ def route_admin_update(request):
             # result = '密码修改成功'
         # else:
             # result = '用户名或者密码长度必须大于2'
-    # body = template('admin.html')
-    # body = body.replace('{{result}}', "<pre>{}</pre>".format(User.all()))
-    # body = body.replace('{{update_result}}', result)
-    # header = response_with_headers(headers)
-    # r = header + '\r\n' + body
-    # return r.encode(encoding='utf-8')
     return redirect('/admin/users')
 
 
@@ -191,7 +121,6 @@ def route_register(request):
     GET，则是请求register页面
     POST，则是用户注册
     """
-    header = 'HTTP/1.x 210 VERY OK\r\nContent-Type: text/html\r\n'
     if request.method == 'POST':
         form = request.form()
         u = User.new(form)
@@ -202,11 +131,8 @@ def route_register(request):
             result = '用户名或者密码长度必须大于2'
     else:
         result = ''
-    body = template('register.html')
-    body = body.replace('{{result}}', result)
-    r = header + '\r\n' + body
-    return r.encode(encoding='utf-8')
-
+    body = renderer('register.html', result=result)
+    return http_response(body)
 
 def route_message(request):
     """
@@ -220,17 +146,13 @@ def route_message(request):
     if request.method == 'POST':
         form = request.form()
         msg = Message.new(form)
-        log('post', form)
-        message_list.append(msg)
-        # 应该在这里保存 message_list
-    header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n'
-    # body = '<h1>消息版</h1>'
-    body = template('html_basic.html')
+        msg.save()
+    ms = Message.all()
+    body = renderer('html_basic.html', messages = ms)
     # 这里的str(m)，m是一个对象，调用了魔法函数__repr__!!!
-    msgs = '<br>'.join([str(m) for m in message_list])
-    body = body.replace('{{messages}}', msgs)
-    r = header + '\r\n' + body
-    return r.encode(encoding='utf-8')
+    # msgs = '<br>'.join([str(m) for m in message_list])
+    # body = body.replace('{{messages}}', msgs)
+    return http_response(body)
 
 
 def route_static(request):
@@ -263,15 +185,10 @@ def route_profile(request):
     u = User.find_by(username=username)
     log('find user: ', u)
     if u is not None:
-        header = 'HTTP/1.1 200 VERY OK\r\nContent-Type: text/html\r\n'
-        body = template('info.html')
-        body = body.replace('{{username}}', u.username).replace(
-            '{{id}}', str(u.id)).replace('{{note}}', u.note)
-        r = header + '\r\n' + body
-        return r.encode(encoding='utf-8')
+        body = renderer('info.html', username=u.username, id=u.id, note=u.note)
+        return http_response(body)
     else:
-        header = 'HTTP/1.1 302 Moved\r\nLocation: http://localhost:3000/login\r\n'
-        return header.encode(encoding='utf-8')
+        return redirect("http://localhost:3000/login")
 
 
 # 路由字典

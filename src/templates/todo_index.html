@@ -11,6 +11,8 @@
         <br>
         <button type="submit">添加</button>
     </form>
-    <div>{{todos}}</div>
+    {% for todo in todos %}
+        <div>{{ todo }}</div>
+    {% endfor %}
 </body>
 </html>

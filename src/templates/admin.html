@@ -6,7 +6,11 @@
 </head>
 <body>
     <h1>你好 admin</h1>
-    <h3>{{result}}</h3>
+    {% for u in users %}
+    <div>
+        {{ u.id }}, {{ u.username }}, {{ u.password }}
+    </div>
+    {% endfor %}
     <br>
     <form action="/admin/user/update" method="post">
         <input type="text" name="id" placeholder="请输入用户id">
