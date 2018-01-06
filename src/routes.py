@@ -128,7 +128,7 @@ def route_register(request):
             u.save()
             result = '注册成功<br> <pre>{}</pre>'.format(User.all())
         else:
-            result = '用户名或者密码长度必须大于2'
+            result = '用户名或者密码长度必须大于2 || 已存在用户名'
     else:
         result = ''
     body = renderer('register.html', result=result)

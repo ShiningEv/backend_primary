@@ -21,7 +21,7 @@ class User(Model):
         #     if u.username == self.username and u.password == self.password:
         #         return True
         # return False
-        return u is not None and u.password == self.password
+        return u is not None and u.password == self.hashed_password(self.password)
         # 这样的代码是不好的，不应该用隐式转换
         # 隐式判断的各种规则，每一种语言都不一样，而且飘忽不定
         # 所以最好全都显式判定，养成良好习惯
@@ -31,7 +31,21 @@ class User(Model):
         """
 
     def validate_register(self):
-        return len(self.username) > 2 and len(self.password) > 2
+        if len(self.username) > 2 and len(self.password) > 2:
+            self.password = self.hashed_password(self.password)
+            if User.find_by(username=self.username) is None:
+                return True
+            else:
+                return False
+
+    def hashed_password(self, pwd):
+        import hashlib
+        # 用 ascii 编码转换成 bytes 对象
+        p = pwd.encode('ascii')
+        s = hashlib.sha256(p)
+        # 返回摘要字符串
+        return s.hexdigest()
+
 
 def test():
     # users = User.all()

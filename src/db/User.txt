@@ -9,7 +9,7 @@
   {
     "id": 1,
     "username": "zhiyuxu",
-    "password": "zhiyuxu",
+    "password": "96455592a8896bc1739a67219bedc4f9e4421f3ab3277331e58580c152abd072",
     "note": "",
     "role": 1
   },
@@ -53,6 +53,13 @@
     "username": "abc",
     "password": "abc",
     "note": "abc",
+    "role": 10
+  },
+  {
+    "id": 5,
+    "username": "aaa",
+    "password": "3e744b9dc39389baf0c5a0660589b8402f3dbb49b89b3e75f2c9355852a3c677",
+    "note": "ccc",
     "role": 10
   }
 ]
