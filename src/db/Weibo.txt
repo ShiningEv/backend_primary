@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "content": "hello+tweet+update+zhiyuxu",
+    "user_id": 6
+  },
+  {
+    "id": 2,
+    "content": "你好啊",
+    "user_id": 6
+  },
+  {
+    "id": 0,
+    "content": "hahahahha",
+    "user_id": 6
+  }
+]

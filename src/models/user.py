@@ -55,6 +55,14 @@ class User(Model):
         hash2 = sha256(hash1 + salt)
         return hash2
 
+    @classmethod
+    def find_uid_by_name(cls, username):
+        u = cls.find_by(username=username)
+        if u is not None:
+            return u.id
+        else:
+            return -1
+
 
 def test():
     # users = User.all()

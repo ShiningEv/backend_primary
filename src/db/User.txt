@@ -7,13 +7,6 @@
     "role": 10
   },
   {
-    "id": 1,
-    "username": "zhiyuxu",
-    "password": "96455592a8896bc1739a67219bedc4f9e4421f3ab3277331e58580c152abd072",
-    "note": "",
-    "role": 1
-  },
-  {
     "id": 0,
     "username": "abc",
     "password": "abc",
@@ -60,6 +53,13 @@
     "username": "aaa",
     "password": "3e744b9dc39389baf0c5a0660589b8402f3dbb49b89b3e75f2c9355852a3c677",
     "note": "ccc",
+    "role": 10
+  },
+  {
+    "id": 6,
+    "username": "zhiyuxu",
+    "password": "25f4b40a862de4039bf03707861d99c02417d77a474d9177c5e258396f10fd51",
+    "note": "zhiyuxu",
     "role": 10
   }
 ]

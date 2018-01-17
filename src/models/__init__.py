@@ -139,6 +139,10 @@ class Model(object):
                 data.append(m)
         return data
 
+    @classmethod
+    def find(cls, id):
+        return cls.find_by(id=id)
+
     def remove(self):
         models = self.all()
         if self.__dict__.get('id') is not None:

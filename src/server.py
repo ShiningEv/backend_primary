@@ -19,6 +19,7 @@ from routes import route_static
 from routes import route_dict
 # 注意要用 from import as 来避免重名
 from routes_todo import route_dict as todo_route
+from routes_weibo import route_dict as weibo_route
 
 
 # 定义一个 class 用于保存请求的数据
@@ -154,6 +155,7 @@ def response_for_path(path):
     # get也是dict的函数，传入两个参数：key & error函数
     r.update(route_dict)
     r.update(todo_route)
+    r.update(weibo_route)
     response = r.get(path, error)
     return response(request)
 
@@ -206,6 +208,6 @@ if __name__ == '__main__':
     # 生成配置并且运行程序
     config = dict(
         host='',
-        port=3012,
+        port=3000,
     )
     run(**config)
