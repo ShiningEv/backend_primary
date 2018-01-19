@@ -48,129 +48,10 @@
 	"buffers":
 	[
 		{
-			"file": "src/server.py",
+			"file": "database/mongo_demo.py",
 			"settings":
 			{
-				"buffer_size": 5289,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/models/weibo.py",
-			"settings":
-			{
-				"buffer_size": 861,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/routes_weibo.py",
-			"settings":
-			{
-				"buffer_size": 3609,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/models/__init__.py",
-			"settings":
-			{
-				"buffer_size": 4718,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "assignments/notes-8.py",
-			"settings":
-			{
-				"buffer_size": 150,
-				"encoding": "UTF-8",
-				"line_ending": "Unix",
-				"name": "1 封装"
-			}
-		},
-		{
-			"file": "src/db/Weibo.txt",
-			"settings":
-			{
-				"buffer_size": 195,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/models/user.py",
-			"settings":
-			{
-				"buffer_size": 2393,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/models/message.py",
-			"settings":
-			{
-				"buffer_size": 240,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/routes_todo.py",
-			"settings":
-			{
-				"buffer_size": 3704,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "Searching 31 files for \"session\"\n\nC:\\Users\\zhiyuxu\\Documents\\Personal\\GitHub\\backend_primary\\src\\log:\n  212  ]\n  213  2018/01/16 19:24:06 models:  [{'id': 2, 'username': 'gua', 'password': 'gua', 'note': '', 'role': 10}, {'id': 0, 'username': 'abc', 'password': 'abc', 'note': 'nice', 'role': 10}, {'id': 0, 'username': 'def', 'password': 'def', 'note': 'def', 'role': 10}, {'id': 1, 'username': 'def', 'password': 'def', 'note': 'def', 'role': 10}, {'id': 2, 'username': 'def', 'password': 'def', 'note': 'def', 'role': 10}, {'id': 3, 'username': 'def', 'password': 'def', 'note': 'def', 'role': 10}, {'id': 4, 'username': 'abc', 'password': 'abc', 'note': 'abc', 'role': 10}, {'id': 5, 'username': 'aaa', 'password': '3e744b9dc39389baf0c5a0660589b8402f3dbb49b89b3e75f2c9355852a3c677', 'note': 'ccc', 'role': 10}, {'id': 6, 'username': 'zhiyuxu', 'password': '25f4b40a862de4039bf03707861d99c02417d77a474d9177c5e258396f10fd51', 'note': 'zhiyuxu', 'role': 10}]\n  214: 2018/01/16 19:24:06 session:  {'4gfs4kswghkls3a8': 'zhiyuxu'}\n  215  2018/01/16 19:24:09 \n  216  \n\nC:\\Users\\zhiyuxu\\Documents\\Personal\\GitHub\\backend_primary\\src\\routes.py:\n   12  # 这个函数用来保存所有的 messages\n   13  message_list = []\n   14: # session 可以在服务器端实现过期功能\n   15: session = {}\n   16  \n   17  \n   ..\n   31  \n   32  def current_user(request):\n   33:     session_id = request.cookies.get('user', '')\n   34:     username = session.get(session_id, '【游客】')\n   35      # username = request.cookies.get('user', '【游客】')\n   36      return username\n   ..\n   58          if u.validate_login():\n   59              # 设置一个随机字符串来当令牌使用\n   60:             session_id = random_str()\n   61:             session[session_id] = u.username\n   62:             log(\"session: \", session)\n   63:             headers['Set-Cookie'] = 'user={}'.format(session_id)\n   64              # 下面是把用户名存入 cookie 中\n   65              # headers['Set-Cookie'] = 'user={}'.format(u.username)\n\nC:\\Users\\zhiyuxu\\Documents\\Personal\\GitHub\\backend_primary\\src\\routes_weibo.py:\n    3  from models.weibo import Comment\n    4  \n    5: from session import session\n    6  from utils import renderer\n    7  from utils import response_with_headers\n    .\n   15  \n   16  def current_user(request):\n   17:     session_id = request.cookies.get('user', '')\n   18:     user_id = session.get(session_id, -1)\n   19      return user_id\n   20  \n\nC:\\Users\\zhiyuxu\\Documents\\Personal\\GitHub\\backend_primary\\src\\session.py:\n    1: session = {}\n    2  \n\n18 matches across 4 files\n",
-			"settings":
-			{
-				"buffer_size": 2479,
-				"line_ending": "Windows",
-				"name": "Find Results",
-				"scratch": true
-			}
-		},
-		{
-			"file": "src/routes.py",
-			"settings":
-			{
-				"buffer_size": 5417,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/log",
-			"settings":
-			{
-				"buffer_size": 170785,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/utils.py",
-			"settings":
-			{
-				"buffer_size": 2174,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "src/session.py",
-			"settings":
-			{
-				"buffer_size": 13,
+				"buffer_size": 2629,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -242,36 +123,39 @@
 	"expanded_folders":
 	[
 		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/archive",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/assignments",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/db",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/models",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/templates"
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/database"
 	],
 	"file_history":
 	[
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/db/Weibo.txt",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/db/User.txt",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/models/__init__.py",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/models/user.py",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/weibo_new.html",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/templates/weibo_index.html",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/db/Comment.txt",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/db/Message.txt",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/db/Todo.txt",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/assignments/notes-8.py",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/database/sqlite_demo.py",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/assignments/comments-8.py",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/server.py",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/utils.py",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/log",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/routes_weibo.py",
 		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/models/weibo.py",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/models/__init__.py",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/assignments/comments-7.py",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/templates/weibo_index.html",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/templates/weibo_new.html",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/templates/weibo_edit.html",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/templates/todo_edit.html",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/db/Weibo.txt",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/db/Comment.txt",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/templates/todo_index.html",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/db/User.txt",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/models/user.py",
 		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/routes_todo.py",
 		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/routes.py",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/session.py",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/weibo_new.html",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/db/Message.txt",
+		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/db/Todo.txt",
 		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/models/todo.py",
 		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/assignments/comments-6.py",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/assignments/comments-7.py",
 		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/.gitignore",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/templates/todo_index.html",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/templates/todo_edit.html",
 		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/demo_jinja2.py",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/log",
-		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/utils.py",
 		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/templates/info.html",
 		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/templates/login.html",
 		"/C/Users/zhiyuxu/Documents/Personal/GitHub/backend_primary/src/templates/register.html",
@@ -370,19 +254,11 @@
 		"/D/PS/PS_Architecture/HWAPI/HWAPI_SCRIPT_DIR_NEW/lrc_hwapi_cci/lib/do_fep_gerrit.sh",
 		"/D/PS/PS_Architecture/HWAPI/HWAPI_SCRIPT_DIR_NEW/lrc_hwapi_cci/lib/do_fep_gerrit2.sh",
 		"/D/PS/PS_Architecture/HWAPI/HWAPI_SCRIPT_DIR_NEW/lrc_hwapi_cci/bin/project_MCU_Build_Rel3_LRC_LSP_CCI.sh",
-		"/D/PS/PS_Architecture/HWAPI/HWAPI_SCRIPT_DIR_NEW/lrc_hwapi_cci/lib/create_copy_up_artifact.sh",
-		"/D/PS/PS_Architecture/HWAPI/HWAPI_SCRIPT_DIR_NEW/lrc_hwapi_cci/bin/project_MCU_Build_Store_Libraries_CCI.sh",
-		"/D/PS/PS_Architecture/HWAPI/HWAPI_SCRIPT_DIR_NEW/lrc_hwapi_cci/lib/MCUbuild_LRC_CCI.sh",
-		"/D/PS/PS_Architecture/HWAPI/HWAPI_SCRIPT_DIR_NEW/lrc_hwapi_cci/lib/MCUfingerGit.sh",
-		"/D/PS/PS_Architecture/HWAPI/HWAPI_SCRIPT_DIR_NEW/lrc_hwapi_cci/bin/project_MCU_Build_Rel3_LRC_CCI.sh",
-		"/D/PS/PS_Architecture/HWAPI/HWAPI_SCRIPT_DIR_NEW/lrc_hwapi_cci/bin/project_MCU_Build_Promo_CCI.sh",
-		"/D/PS/PS_Architecture/HWAPI/HWAPI_SCRIPT_DIR_NEW/lrc_hwapi_cci/lib/ECL.py",
-		"/D/PS/PS_Architecture/HWAPI/HWAPI_SCRIPT_DIR_NEW/lrc_hwapi_cci/bin/project_DSP_Build_Promo_CCI.sh",
-		"/D/PS/PS_Architecture/HWAPI/HWAPI_SCRIPT_DIR_NEW/lrc_hwapi_cci/lib/LRC_optimize_tests_of_dsp_builds_Git.sh"
+		"/D/PS/PS_Architecture/HWAPI/HWAPI_SCRIPT_DIR_NEW/lrc_hwapi_cci/lib/create_copy_up_artifact.sh"
 	],
 	"find":
 	{
-		"height": 34.0
+		"height": 52.0
 	},
 	"find_in_files":
 	{
@@ -398,6 +274,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"delete",
+			"Tweet",
 			"session",
 			"cookie",
 			"session",
@@ -433,6 +311,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"Weibo",
 			"renderer",
 			"osp",
 			"log"
@@ -446,553 +325,39 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/server.py",
+					"file": "database/mongo_demo.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5289,
+						"buffer_size": 2629,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2116,
-								2116
+								1446,
+								1446
 							]
 						],
 						"settings":
 						{
 							"git_gutter_is_enabled": true,
 							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
 							"syntax": "Packages/Python/Python.sublime-syntax",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2440.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/models/weibo.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 861,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								861,
-								861
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1368.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/routes_weibo.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3609,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3310,
-								3310
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"incomplete_sync": null,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "src/models/__init__.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4718,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4679,
-								4679
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 4033.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "assignments/notes-8.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 150,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								150,
-								150
-							]
-						],
-						"settings":
-						{
-							"auto_name": "1 封装",
-							"git_gutter_is_enabled": true,
-							"incomplete_sync": null,
-							"syntax": "Packages/Python/Python.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "src/db/Weibo.txt",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 195,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1,
-								1
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Text/Plain text.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 11,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "src/models/user.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2393,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								25,
-								25
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "src/models/message.py",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 240,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Python/Python.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "src/routes_todo.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3704,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								163,
-								163
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2664.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2479,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										987,
-										994
-									],
-									[
-										1204,
-										1211
-									],
-									[
-										1233,
-										1240
-									],
-									[
-										1321,
-										1328
-									],
-									[
-										1388,
-										1395
-									],
-									[
-										1400,
-										1407
-									],
-									[
-										1607,
-										1614
-									],
-									[
-										1652,
-										1659
-									],
-									[
-										1660,
-										1667
-									],
-									[
-										1709,
-										1716
-									],
-									[
-										1721,
-										1728
-									],
-									[
-										1790,
-										1797
-									],
-									[
-										2057,
-										2064
-									],
-									[
-										2072,
-										2079
-									],
-									[
-										2220,
-										2227
-									],
-									[
-										2286,
-										2293
-									],
-									[
-										2298,
-										2305
-									],
-									[
-										2431,
-										2438
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								1275,
-								1275
-							]
-						],
-						"settings":
-						{
-							"detect_indentation": false,
-							"git_gutter_is_enabled": false,
-							"incomplete_sync": null,
-							"line_numbers": false,
-							"output_tag": 1,
-							"result_base_dir": "",
-							"result_file_regex": "^([^ \t].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 360.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 13,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "src/routes.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5417,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1464,
-								1464
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 4453.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 11,
-					"file": "src/log",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 170785,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								43602,
-								43602
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Text/Plain text.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 30010.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 12,
-					"type": "text"
-				},
-				{
-					"buffer": 12,
-					"file": "src/utils.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2174,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1479,
-								1480
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 13,
-					"file": "src/session.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 13,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								13,
-								13
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"incomplete_sync": null,
-							"syntax": "Packages/Python/Python.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
 					"type": "text"
 				}
 			]
@@ -1031,7 +396,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 293.0
+		"height": 187.0
 	},
 	"output.find_results":
 	{
@@ -1045,7 +410,7 @@
 	"project": "backend.sublime-project",
 	"replace":
 	{
-		"height": 63.0
+		"height": 93.0
 	},
 	"save_all_on_build": true,
 	"select_file":
