@@ -171,6 +171,7 @@ class User(Model):
             self.id = int(self.id)
         self.username = form.get('username', '')
         self.password = form.get('password', '')
+        self.role = form.get('role', 10)
 
     def validate_login(self):
         # return self.username == 'gua' and self.password == '123'

@@ -7,6 +7,7 @@ from routes import route_static
 from routes import route_dict
 # 注意要用 from import as 来避免重名
 from routes_todo import route_dict as todo_route
+from routes_admin import route_dict as admin_route
 
 
 # 定义一个 class 用于保存请求的数据
@@ -114,6 +115,7 @@ def response_for_path(path):
     }
     r.update(route_dict)
     r.update(todo_route)
+    r.update(admin_route)
     response = r.get(path, error)
     return response(request)
 
